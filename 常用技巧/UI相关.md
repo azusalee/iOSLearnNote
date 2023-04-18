@@ -24,3 +24,16 @@ cell.alphaSpeed = -1/cell.lifetime
 cell.emissionLatitude = CGFloat.pi
 emitterLayer.emitterCells = [cell]
 ```
+
+# 通过代码让app进入后台
+
+```swift
+// 本质是调用到UIApplication的suspend方法
+let targetSelect = Selector("suspend")
+// 这两种方法会去除warning，效果都是一样的
+// let targetSelect = #selector(URLSessionTask.suspend)
+// let targetSelect = #selector(NSXPCConnection.suspend)
+if UIApplication.shared.responds(to: targetSelect) {
+    UIApplication.shared.perform(targetSelect)
+}
+```

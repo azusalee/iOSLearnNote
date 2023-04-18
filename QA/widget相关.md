@@ -9,3 +9,15 @@ class IntentHandler: INExtension, MediumConfigIntentHandling, SmallConfigIntentH
     // 其他的实现代码
 }
 ```
+
+# widget怎么做到旋转动画的
+
+使用_clockHandRotationEffect，可以做到，但这个是私有api，xcode14之后就禁止了。
+
+_clockHandRotationEffect是一个让view跟随时针、分针、秒针旋转的方法，旋转的频率是固定的。
+
+猜想:
+可以用XCode13 把_clockHandRotationEffect封装成一个公开方法，然后导出成库，这样就可以让xcode14以上用了
+
+参考：
+https://stackoverflow.com/questions/66258627/ios-clock-animations-on-homescreen-widget

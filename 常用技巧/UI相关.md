@@ -37,3 +37,15 @@ if UIApplication.shared.responds(to: targetSelect) {
     UIApplication.shared.perform(targetSelect)
 }
 ```
+
+# talbelView里有TextFiled，并tableView的数据会根据TextField的内容变化而变化，如何不让键盘自动收起
+
+由于reloadData，会导致tableView里的cell的textField失去焦点，导致键盘收起。
+
+所以方案有以下:
+
+1. 只reload指定的indexPath，但如果需要整个列表刷，这样就不合适了。
+
+2. 对应的textFiled点击时，另外新建一个textFiled并调用becomeFirstResponse，然后把新的盖到旧的上面，做出一种旧的textFiled在相应的假象。这个方案的表现效果是最好的，但代码也特别多，因为需要增加textField和把新textField的内容同步到旧textFiled上的逻辑，增加日后维护难度。
+
+3. 修改布局，就是不要把textField放到tableView里，但这个其实等于是改需求了。

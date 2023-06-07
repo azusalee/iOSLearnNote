@@ -44,8 +44,14 @@ if UIApplication.shared.responds(to: targetSelect) {
 
 所以方案有以下:
 
-1. 只reload指定的indexPath，但如果需要整个列表刷，这样就不合适了。
+1. 只reload指定的indexPath，但如果需要整个列表刷，例如列表的行数会改变这类的，这样就不合适了。
 
-2. 对应的textFiled点击时，另外新建一个textFiled并调用becomeFirstResponse，然后把新的盖到旧的上面，做出一种旧的textFiled在相应的假象。这个方案的表现效果是最好的，但代码也特别多，因为需要增加textField和把新textField的内容同步到旧textFiled上的逻辑，增加日后维护难度。
+2. 对应的textFiled点击时，另外新建一个textFiled并调用becomeFirstResponse，然后把新的盖到旧的上面，做出一种旧的textFiled在响应的假象。这个方案的表现效果是最好的，但代码也特别多，因为需要增加textField和把新textField的内容同步到旧textFiled上的逻辑，增加日后维护难度。
 
-3. 修改布局，就是不要把textField放到tableView里，但这个其实等于是改需求了。
+3. 修改布局，就是不要把textField放到tableView里，但这个其实等于是改需求了。但这个其实是最合理的，应该尽量避免这样的需求出现。
+
+# LaunchScreen修改后实际却没有更改
+
+这是因为iOS会缓存LaunchScreen，所以即使你改了，然后安装，其实还是会从缓存中读取，所以显示的还是旧启动页，网上找了很多，说可以通过删除缓存来做到更新，但经实际测试，发现是无效的(也有可能网上的删除路径不对)。
+
+如果要及时更新，可以修改LaunchScreen的文件名，并修改里面用到图片的名字，而且这张图片不能放到asset里面。

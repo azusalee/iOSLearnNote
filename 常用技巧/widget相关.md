@@ -22,3 +22,17 @@ _clockHandRotationEffect是一个让view跟随时针、分针、秒针旋转的�
 
 参考：
 https://stackoverflow.com/questions/66258627/ios-clock-animations-on-homescreen-widget
+
+# Widget里同样的字体跟在app里显示时不一样
+
+有问题机型
+15 pro max
+15 plus
+14 pro max
+14 plus
+13 pro max
+
+暂时并没有测试所有机型，估计所有promax和plus都有这样的问题，目前发现使用自定义字体时，widget里的字体大小比在app里显示的大 1.07 倍左右，导致布局位置的计算不准确。但使用系统的字体时，大小又是一样的（？？挺莫名其妙的）
+
+处理方法，判断如果机型是上述机型且是在widget显示，缩小字体大小，具体就是判断屏幕宽高为430*932和428*926。
+

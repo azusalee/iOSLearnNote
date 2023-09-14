@@ -35,4 +35,5 @@ https://stackoverflow.com/questions/66258627/ios-clock-animations-on-homescreen-
 暂时并没有测试所有机型，估计所有promax和plus都有这样的问题，目前发现使用自定义字体时，widget里的字体大小比在app里显示的大 1.07 倍左右，导致布局位置的计算不准确。但使用系统的字体时，大小又是一样的（？？挺莫名其妙的）
 
 处理方法，判断如果机型是上述机型且是在widget显示，缩小字体大小，具体就是判断屏幕宽高为430*932和428*926。
+经研究，发现是字体创建的方法有问题，使用Font.custom(name, fixedSize: size)的方法创建就正常了。
 

@@ -37,3 +37,12 @@ https://stackoverflow.com/questions/66258627/ios-clock-animations-on-homescreen-
 处理方法，判断如果机型是上述机型且是在widget显示，缩小字体大小，具体就是判断屏幕宽高为430*932和428*926。
 经研究，发现是字体创建的方法有问题，使用Font.custom(name, fixedSize: size)的方法创建就正常了。
 
+# iOS17Widget的交互
+
+iOS17后，widget增加交互的功能，只支持button和toggle控件，点击后可以不进入app执行一些代码，通过AppIntents实现。由于代码是在 widget 里执行的，所以最多只能更新数据，打开app之类的功能是做不到的，以及让主app执行代码也是不行的。
+
+但发现部分app能做到点击widget按钮控制主app里的音乐播放。但有以下限制：
+
+- app要能在后台运行(通过音乐播放或者总是定位的权限可以做到)
+
+经一番测试大概猜测，其做法是这样的，点击widget的按钮后更新数据，主app里就常驻一个定时器，定时检测这个数据的值是否有变化，然后根据这些数据的变化控制播放逻辑。估计定时器的执行间隔为0.2~0.5秒。

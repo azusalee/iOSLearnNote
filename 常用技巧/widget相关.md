@@ -46,3 +46,15 @@ iOS17后，widget增加交互的功能，只支持button和toggle控件，点击
 - app要能在后台运行(通过音乐播放或者总是定位的权限可以做到)
 
 经一番测试大概猜测，其做法是这样的，点击widget的按钮后更新数据，主app里就常驻一个定时器，定时检测这个数据的值是否有变化，然后根据这些数据的变化控制播放逻辑。估计定时器的执行间隔为0.2~0.5秒。
+
+# XCode15运行iOS16.0及以下的系统显示不出小组件
+
+目前有几个操作可能会导致这样的问题，大多数问题看上去像是XCode有bug。以下问题都是在模拟器上测试的，由于没有iOS16以下的设备，所以真机的情况还是不太明确。
+
+1.other Linker Flags 有值。
+2.Excluded Architectures填arm64。(这个有些麻烦，有些第三方sdk必须要去除arm64才能在模拟器跑)
+3.添加了intentdefinition文件，但没有添加IntentExtend的target。
+4.添加了widget，但没有在WidgetBundle中使用。(但有时又不会有问题)
+5.Minimum Deployments的版本没有设置对。
+6.有些代码会莫名的跑不了，但加点回车，调整下位置就行了。
+7.在WidgetBundle里加了if #available(iOS 16.0, *)的分支语句也不行。把版本稍微提高点就行了，这边尝试用#available(iOS 16.2, *)是可以的。

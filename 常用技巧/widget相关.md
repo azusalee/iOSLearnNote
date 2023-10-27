@@ -52,9 +52,48 @@ iOS17后，widget增加交互的功能，只支持button和toggle控件，点击
 目前有几个操作可能会导致这样的问题，大多数问题看上去像是XCode有bug。以下问题都是在模拟器上测试的，由于没有iOS16以下的设备，所以真机的情况还是不太明确。
 
 1.other Linker Flags 有值。
-2.Excluded Architectures填arm64。(这个有些麻烦，有些第三方sdk必须要去除arm64才能在模拟器跑)
+2.Excluded Architectures填arm64。(这个有些麻烦，有些第三方sdk必须要去除arm64才能在模拟器跑，使用Rosetta模式也是会显示不出widget)
 3.添加了intentdefinition文件，但没有添加IntentExtend的target。
 4.添加了widget，但没有在WidgetBundle中使用。(但有时又不会有问题)
 5.Minimum Deployments的版本没有设置对。
 6.有些代码会莫名的跑不了，但加点回车，调整下位置就行了。
-7.在WidgetBundle里加了if #available(iOS 16.0, *)的分支语句也不行。把版本稍微提高点就行了，这边尝试用#available(iOS 16.2, *)是可以的。
+7.不能在@main的widgetbundle里直接写版本判断分支语句。可以参考以下写法
+
+```swift
+
+@main
+struct AppWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        MyWidgetBundle().body
+    }
+}
+
+// 必须要这样写，不然iOS16不显示小组件列表(应该是xcode或者iOS16的bug)
+struct MyWidgetBundle: WidgetBundle {
+    var body: some Widget {
+        if #available(iOS 16.0, *) {
+            return WidgetBundleBuilder.buildBlock(SmallWidget(),
+                                                  MediumWidget(),
+                                                  LargeWidget(),
+                                                  WeekMonthYearWidget(),
+                                                  MutiCountInfoSmallWidget(),
+                                                  MutiCountInfoMediumWidget(),
+                                                  MutiCountInfoLargeWidget(),
+                                                  SingleCountInfoCircleWidget(),
+                                                  SingleCountInfoRectangularWidget(),
+                                                  MutiCountInfoRectangularWidget()
+            )
+        } else {
+            return WidgetBundleBuilder.buildBlock(SmallWidget(),
+                                                  MediumWidget(),
+                                                  LargeWidget(),
+                                                  WeekMonthYearWidget(),
+                                                  MutiCountInfoSmallWidget(),
+                                                  MutiCountInfoMediumWidget(),
+                                                  MutiCountInfoLargeWidget()
+            )
+        }
+    }
+}
+```
+

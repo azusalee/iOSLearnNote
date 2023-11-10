@@ -55,3 +55,20 @@ if UIApplication.shared.responds(to: targetSelect) {
 这是因为iOS会缓存LaunchScreen，所以即使你改了，然后安装，其实还是会从缓存中读取，所以显示的还是旧启动页，网上找了很多，说可以通过删除缓存来做到更新，但经实际测试，发现是无效的(也有可能网上的删除路径不对)。
 
 如果要及时更新，可以修改LaunchScreen的文件名，并修改里面用到图片的名字，而且这张图片不能放到asset里面。
+
+# 模糊蒙版
+
+iOS模糊可以通过UIVisualEffectView来实现，但这个控件无法调整模糊度，调整透明度并不能改变模糊度。但可以通过控制动画达到控制模糊度的目的，具体参考以下代码
+
+```swift
+let blurEffectView = UIVisualEffectView(effect: nil)
+let blurEffect: UIBlurEffect = .init(style: .regular)
+// 通过动画控制模糊度，注意animator在释放前必须先调用 animator.stopAnimation(true) 停止动画，否则会崩溃
+let animator = UIViewPropertyAnimator(duration: 0, curve: .linear) { [weak self] in
+    blurEffectView.effect = blurEffect
+}
+// pausesOnCompletion设置为true，可以让app进入后台后，依然保留效果
+animator.pausesOnCompletion = true
+// 通过控制动画的完成度来间接控制模糊度
+animator.fractionComplete = 0.22
+```

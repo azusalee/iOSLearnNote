@@ -97,3 +97,26 @@ struct MyWidgetBundle: WidgetBundle {
 }
 ```
 
+# 小组件url跳转
+
+在小组件可以通过.widgetURL或者Link()来指定url，在点击时把对应url带到宿主app的回调方法里，从而分辨出点击的是什么。
+其中widgetURL一个组件里只能有一个，而Link可以有多个。
+
+在iOS16，iOS17上测试发现，使用widgetURL时，有时刷新组件然后不用widgetURL，但点击时依然有效。
+
+参考代码
+
+```
+    var body: some View {
+            VStack(spacing: 10) {
+                Image("vip_crown")
+                Text("解锁会员即可使用")
+                    .font(.custom("PingFangSC", fixedSize: 12).weight(.semibold))
+                    .foregroundColor(Color.white)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.black.opacity(0.6))
+        // 使用widgetURL，有时候即时刷新了小组件，但这个跳转的逻辑还会留下(感觉是系统的bug)，所以只能用Link
+        .widgetURL(URL(string: "\(UrlRouteScheme.pomoup.rawValue)://\(UrlRouteHost.showVipVC)")!)
+    }
+```

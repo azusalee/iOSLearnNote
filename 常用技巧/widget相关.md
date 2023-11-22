@@ -120,3 +120,9 @@ struct MyWidgetBundle: WidgetBundle {
         .widgetURL(URL(string: "\(UrlRouteScheme.pomoup.rawValue)://\(UrlRouteHost.showVipVC)")!)
     }
 ```
+
+# iOS17小组件不显示在列表或者显示空白
+
+这个问题，重启手机可以解决。
+
+经测试发现，每次安装或者更新app时，都有概率会让这个app的小组件显示出问题，只能重启手机才能解决。目前看上去像是XCode15或者iOS17的bug。

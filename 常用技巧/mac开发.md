@@ -8,4 +8,6 @@
 
 大概原理就是，遍历window，找出对应的NSStatusItem。
 
+# 通过代码显示窗口，但窗口没有自动获取焦点
 
+调用NSApplication.shared.activate()即可
